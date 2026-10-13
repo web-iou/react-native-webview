@@ -64,3 +64,16 @@ declare class WebView<P = {}> extends Component<WebViewProps & P> {
 
 export { WebView };
 export default WebView;
+
+/**
+ * Clears the resource cache shared by every WebView in the app. No WebView needs to be mounted.
+ * Rejects on platforms other than iOS, macOS and Android.
+ */
+export function clearCache(): Promise<void>;
+
+/**
+ * Clears all website data shared by every WebView in the app: caches, cookies, Web Storage,
+ * IndexedDB and other storage. No WebView needs to be mounted.
+ * Rejects on platforms other than iOS, macOS and Android.
+ */
+export function clearWebsiteData(): Promise<void>;

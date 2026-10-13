@@ -27,6 +27,12 @@ struct RNCWebViewModule
   REACT_METHOD(shouldStartLoadWithLockIdentifier)
   void shouldStartLoadWithLockIdentifier(bool shouldStart, double lockIdentifier) noexcept;
 
+  REACT_METHOD(clearCache)
+  void clearCache(React::ReactPromise<void> &&promise) noexcept;
+
+  REACT_METHOD(clearWebsiteData)
+  void clearWebsiteData(React::ReactPromise<void> &&promise) noexcept;
+
   REACT_METHOD(isFileUploadSupported)
   void isFileUploadSupported(React::ReactPromise<bool> &&promise) noexcept;
 

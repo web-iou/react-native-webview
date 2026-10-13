@@ -18,13 +18,20 @@ import androidx.core.content.FileProvider;
 import androidx.core.util.Pair;
 
 import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.GeolocationPermissions;
 import android.webkit.MimeTypeMap;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebStorage;
+import android.webkit.WebView;
+import android.webkit.WebViewDatabase;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.ActivityEventListener;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
@@ -181,6 +188,44 @@ public class RNCWebViewModule extends NativeRNCWebViewModuleSpec implements Acti
                 return false;
             }
         };
+    }
+
+    @Override
+    public void clearCache(Promise promise) {
+        UiThreadUtil.runOnUiThread(() -> {
+            try {
+                WebView webView = new WebView(getReactApplicationContext());
+                webView.clearCache(true);
+                webView.destroy();
+                promise.resolve(null);
+            } catch (Exception e) {
+                promise.reject("E_CLEAR_CACHE", e);
+            }
+        });
+    }
+
+    @Override
+    public void clearWebsiteData(Promise promise) {
+        UiThreadUtil.runOnUiThread(() -> {
+            try {
+                WebView webView = new WebView(getReactApplicationContext());
+                webView.clearCache(true);
+                webView.clearFormData();
+                webView.destroy();
+
+                WebStorage.getInstance().deleteAllData();
+                WebViewDatabase.getInstance(getReactApplicationContext()).clearHttpAuthUsernamePassword();
+                GeolocationPermissions.getInstance().clearAll();
+
+                CookieManager cookieManager = CookieManager.getInstance();
+                cookieManager.removeAllCookies(removed -> {
+                    cookieManager.flush();
+                    promise.resolve(null);
+                });
+            } catch (Exception e) {
+                promise.reject("E_CLEAR_WEBSITE_DATA", e);
+            }
+        });
     }
 
     @Override

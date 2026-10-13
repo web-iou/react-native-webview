@@ -4,6 +4,8 @@ import { Double } from 'react-native/Libraries/Types/CodegenTypes';
 
 export interface Spec extends TurboModule {
   shouldStartLoadWithLockIdentifier(shouldStart: boolean, lockIdentifier: Double): void;
+  clearCache(): Promise<void>;
+  clearWebsiteData(): Promise<void>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('RNCWebViewModule');
