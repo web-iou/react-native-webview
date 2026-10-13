@@ -1,0 +1,9 @@
+import type { TurboModule } from 'react-native';
+import { Double } from 'react-native/Libraries/Types/CodegenTypes';
+export interface Spec extends TurboModule {
+    shouldStartLoadWithLockIdentifier(shouldStart: boolean, lockIdentifier: Double): void;
+    clearCache(): Promise<void>;
+    clearWebsiteData(): Promise<void>;
+}
+declare const _default: Spec;
+export default _default;
